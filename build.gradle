@@ -1,0 +1,45 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    google()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+  dependencies {
+    classpath "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    classpath "com.mobidevelop.robovm:robovm-gradle-plugin:$robovmVersion"
+    classpath "com.android.tools.build:gradle:$androidPluginVersion"
+  }
+}
+
+allprojects {
+  apply plugin: 'eclipse'
+  apply plugin: 'idea'
+}
+
+configure(subprojects - project(':android')) {
+  apply plugin: 'java'
+  apply plugin: 'kotlin'
+  targetCompatibility = '1.7'
+  sourceCompatibility = '1.7'
+}
+
+subprojects {
+  version = '0.0.1-SNAPSHOT'
+  ext.appName = 'pong'
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+  }
+}
+
+// Clearing Eclipse project data in root folder:
+tasks.eclipse.doLast {
+  delete '.project'
+  delete '.classpath'
+  delete '.settings/'
+}
