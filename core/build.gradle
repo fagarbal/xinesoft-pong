@@ -2,8 +2,8 @@
 eclipse.project.name = appName + '-core'
 
 dependencies {
-  compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-  compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
+  implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+  implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
 }
         
