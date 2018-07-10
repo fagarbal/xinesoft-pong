@@ -22,8 +22,8 @@ class PongGame : ApplicationAdapter() {
 
     override fun create () {
         camera = Camera()
-        paddleA = Paddle(Color.RED)
-        paddleB = Paddle(Color.GREEN)
+        paddleA = Paddle(Color.RED, camera.cam)
+        paddleB = Paddle(Color.GREEN, camera.cam)
 
         ball = Ball()
         modelBatch = ModelBatch()
@@ -39,12 +39,14 @@ class PongGame : ApplicationAdapter() {
     }
 
     override fun render() {
-        paddleA.update(Keys.W, Keys.S)
-        paddleB.update(Keys.UP, Keys.DOWN)
-        ball.update()
-
         Gdx.gl.glViewport(0, 0, Gdx.graphics.width, Gdx.graphics.height)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT or GL20.GL_DEPTH_BUFFER_BIT)
+        camera.cam.update()
+        paddleA.update(true)
+        paddleB.update(false)
+        ball.update()
+
+        checkBallCollision()
 
         modelBatch.begin(camera.cam)
         modelBatch.render(paddleA.instance, environment)
@@ -57,5 +59,12 @@ class PongGame : ApplicationAdapter() {
         modelBatch.dispose()
         paddleA.dispose()
         paddleB.dispose()
+    }
+
+    fun checkBallCollision () {
+        val biggerBox = getBiggerBox();
+        if(isBallTouchingPaddel(biggerBox)){
+            changeDirectionOfBall();
+        }
     }
 }
