@@ -19,17 +19,47 @@ class Ball {
     var direction = -1
     var position = instance.transform.getTranslation(Vector3())
     var rect = Rectangle(position.x, position.y, 2.5f, 2.5f)
+    var velocity = 0.5f
+    var velocityY = 0f
+    var directionY = -1
+    var scoreA = 0
+    var scoreB = 0
 
     fun update() {
         position = instance.transform.getTranslation(Vector3())
 
-        if (position.x > 50) position.x = 0f
-        if (position.x < -50) position.x = 0f
+        if (position.y > 30) {
+            directionY *= -1
+        }
 
-        position.x += 0.5f * direction
+        if (position.y < -30) {
+            directionY *= -1
+        }
+
+
+        if (position.x > 50) {
+            scoreA++
+        }
+
+        if (position.x < -50) {
+            scoreB++
+        }
+
+        if (position.x > 50 || position.x < -50) {
+            position.x = 0f
+            position.y = 0f
+            velocity = 0.5f
+            velocityY = 0f
+        }
+        position.x += velocity * direction
+        position.y += velocityY * directionY
+        rect.setCenter(position.x, position.y)
 
         instance.transform.setTranslation(position)
-        rect.setCenter(position.x, position.y)
+    }
+
+    fun dispose() {
+        model.dispose()
     }
 
 }

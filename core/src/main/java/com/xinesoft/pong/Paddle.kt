@@ -23,18 +23,16 @@ class Paddle (color: Color, val cam: PerspectiveCamera){
 
     fun update(mayor: Boolean) {
         position = instance.transform.getTranslation(Vector3())
+        rect.setCenter(position.x, position.y)
+
         for (i in 0..1) {
             if(Gdx.input.isTouched(i) && if (mayor) Gdx.input.getX(i) <= Gdx.graphics.width / 2 else Gdx.input.getX(i) > Gdx.graphics.width / 2 ) {
-
                 val clickPos = Vector3()
                 clickPos.set(0f, Gdx.input.getY(i).toFloat(), 0f)
 
                 cam.unproject(clickPos)
                 instance.transform.setToTranslation(position.x, clickPos.y * cam.position.z, position.z)
 
-
-                //rect.setPosition(position.x, position.y)
-                rect.setCenter(position.x, position.y)
             }
         }
     }
