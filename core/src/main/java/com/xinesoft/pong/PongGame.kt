@@ -1,5 +1,6 @@
 package com.xinesoft.pong
 
+import com.badlogic.ashley.core.Engine
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
@@ -9,9 +10,9 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute
 import com.badlogic.gdx.Input.Keys
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight
+import com.badlogic.gdx.math.Intersector
 
 class PongGame : ApplicationAdapter() {
-
     lateinit var camera: Camera
     lateinit var paddleA: Paddle
     lateinit var paddleB: Paddle
@@ -20,12 +21,14 @@ class PongGame : ApplicationAdapter() {
     lateinit var modelBatch: ModelBatch
     lateinit var environment: Environment
 
-    override fun create () {
+    override fun create() {
         camera = Camera()
         paddleA = Paddle(Color.RED, camera.cam)
         paddleB = Paddle(Color.GREEN, camera.cam)
 
+
         ball = Ball()
+
         modelBatch = ModelBatch()
         environment = Environment()
 
@@ -46,7 +49,10 @@ class PongGame : ApplicationAdapter() {
         paddleB.update(false)
         ball.update()
 
-        checkBallCollision()
+        val overlapsA = Intersector.overlaps(paddleA.rect, ball.rect)
+        val overlapsB = Intersector.overlaps(paddleB.rect, ball.rect)
+
+        if (overlapsA or overlapsB) ball.direction *= -1
 
         modelBatch.begin(camera.cam)
         modelBatch.render(paddleA.instance, environment)
@@ -55,16 +61,9 @@ class PongGame : ApplicationAdapter() {
         modelBatch.end()
     }
 
-    override fun dispose () {
+    override fun dispose() {
         modelBatch.dispose()
         paddleA.dispose()
         paddleB.dispose()
-    }
-
-    fun checkBallCollision () {
-        val biggerBox = getBiggerBox();
-        if(isBallTouchingPaddel(biggerBox)){
-            changeDirectionOfBall();
-        }
     }
 }
